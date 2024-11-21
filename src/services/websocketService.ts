@@ -1,63 +1,45 @@
-// // src/services/websocketService.ts
-import { io } from 'socket.io-client';
-
-// class WebSocketService {
-//   private socket: any;
-
-//   constructor() {
-//     this.socket = io('wss://mock-trading-api.com');  // Replace with actual WebSocket API endpoint
-//   }
-
-//   subscribeToOrderBook(symbol: string, callback: Function) {
-//     this.socket.emit('subscribe', symbol);
-//     this.socket.on('orderBookUpdate', (data: any) => {
-//       callback(data); // Pass the data to update the state
-//     });
-//   }
-
-//   unsubscribeFromOrderBook() {
-//     this.socket.emit('unsubscribe');
-//   }
-// }
-
-// export default new WebSocketService();
-
-
 // src/services/websocketService.ts
 
 class WebSocketService {
-  private socket: WebSocket | null = null;
+  private socket: WebSocket;
 
-  subscribeToBinanceOrderBook(pair: string, onMessage: (data: any) => void): void {
-    const streamName = `${pair.toLowerCase()}@depth@100ms`; // Depth stream with 100ms update
-    const binanceWebSocketURL = `wss://stream.binance.com:9443/ws/${streamName}`;
+  constructor() {
+    // WebSocket URL for Binance Depth Stream (order book updates)
+    this.socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@depth');  
+  }
 
-    this.socket = new WebSocket(binanceWebSocketURL);
-
-    this.socket.onopen = () => {
-      console.log(`Connected to Binance WebSocket for pair: ${pair}`);
-    };
-
+  subscribeToOrderBook(callback: Function) {
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      onMessage(data);
+      // The structure contains bid and ask orders
+      if (data && data.a && data.b) {
+        const bidOrders = data.a.map((order: any) => ({
+          price: order[0],  // Bid price
+          volume: order[1], // Bid volume
+        }));
+
+        const askOrders = data.b.map((order: any) => ({
+          price: order[0],  // Ask price
+          volume: order[1], // Ask volume
+        }));
+
+        // Pass the order book data to the callback
+        callback({
+          bidOrders,
+          askOrders,
+        });
+      }
     };
 
     this.socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    this.socket.onclose = () => {
-      console.log(`WebSocket connection closed for pair: ${pair}`);
+      console.error('WebSocket Error:', error);
     };
   }
 
-  unsubscribe(): void {
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
-    }
+  unsubscribe() {
+    this.socket.close();  // Close the WebSocket connection
   }
 }
 
 export default new WebSocketService();
+

@@ -5,10 +5,10 @@ import WebSocketService from '../services/websocketService';
 interface OrderBookState {
   bidOrders: { price: string; volume: string }[];
   askOrders: { price: string; volume: string }[];
-  slippage: string;
-  priceImpact: string;
-  fees: string;
-  percentageChange: string;
+  slippage?: string;
+  priceImpact?: string;
+  fees?: string;
+  percentageChange?: string;
   loading: boolean;
   error: string | null;
 }
@@ -42,10 +42,11 @@ export const fetchOrderBook = createAsyncThunk<OrderBookPayload, void, AsyncThun
   'orderBook/fetchOrderBook',
   async (_, { rejectWithValue }) => {
     try {
-      const orderBookData: OrderBookPayload = await new Promise((resolve, reject) => {
-        WebSocketService.subscribeToBinanceOrderBook('ETH-USDT', (data: any) => {
-          
+      return new Promise((resolve, reject) => {
+        WebSocketService.subscribeToOrderBook((data: any) => {
           if (data && data.bidOrders && data.askOrders) {
+            // console.log('data.bidOrders', data.bidOrders)
+            // console.log('data.askOrders', data.askOrders)
             resolve({
               bidOrders: data.bidOrders.map((order: any) => ({
                 price: order.price.toString(),
@@ -55,18 +56,16 @@ export const fetchOrderBook = createAsyncThunk<OrderBookPayload, void, AsyncThun
                 price: order.price.toString(),
                 volume: order.volume.toString(),
               })),
-              slippage: data.slippage || '',
-              priceImpact: data.priceImpact || '',
-              fees: data.fees || '',
-              percentageChange: data.percentageChange || '',
+              slippage: '',        
+              priceImpact: '',     
+              fees: '',            
+              percentageChange: '', 
             });
           } else {
             reject(new Error('Invalid order book data received from WebSocket'));
           }
         });
       });
-
-      return orderBookData;
     } catch (error: any) {
       return rejectWithValue(error.message || 'Failed to fetch order book data');
     }
