@@ -11,11 +11,11 @@ const OrderBook = () => {
 
   useEffect(() => {
     dispatch(fetchOrderBook()); // Fetch initial data
-    const interval = setInterval(() => {
-      dispatch(fetchOrderBook()); // Polling every 2 seconds
-    }, 2000);
+    // const interval = setInterval(() => {
+    //   dispatch(fetchOrderBook()); // Polling every 2 seconds
+    // }, 2000);
 
-    return () => clearInterval(interval); // Clean up the interval on unmount
+    // return () => clearInterval(interval); // Clean up the interval on unmount
   }, [dispatch]);
 
   const renderPriceTrend = (price: string) => {
