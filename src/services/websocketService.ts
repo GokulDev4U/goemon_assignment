@@ -1,5 +1,28 @@
 // src/services/websocketService.ts
 
+const calculateMetrics = (bidOrders: any[], askOrders: any[]) => {
+  if (bidOrders.length === 0 || askOrders.length === 0) {
+    return {
+      slippage: '0',
+      priceImpact: '0',
+      fees: '0',
+      percentageChange: '0',
+    };
+  }
+
+  const highestBid = parseFloat(bidOrders[0].price);
+  const lowestAsk = parseFloat(askOrders[0].price);
+
+  // Mock calculations
+  const slippage = ((lowestAsk - highestBid) / highestBid * 100).toFixed(2); // % difference
+  const priceImpact = (Math.random() * 0.5).toFixed(2); // Example value
+  const fees = ((lowestAsk * 0.001)).toFixed(2); // Assuming 0.1% fee
+  const percentageChange = ((lowestAsk - highestBid) / highestBid * 100).toFixed(2);
+
+  return { slippage, priceImpact, fees, percentageChange };
+};
+
+
 class WebSocketService {
   private socket: WebSocket;
 
@@ -23,10 +46,12 @@ class WebSocketService {
           volume: order[1], // Ask volume
         }));
 
-        // Pass the order book data to the callback
+        const metrics = calculateMetrics(bidOrders, askOrders);
+
         callback({
           bidOrders,
           askOrders,
+          ...metrics, 
         });
       }
     };

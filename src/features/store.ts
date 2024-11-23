@@ -3,12 +3,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import walletReducer from './walletSlice';
 import tokenReducer from './tokenSlice';
 import orderBookReducer from './orderBookSlice';
+import transactionReducer from './transactionSlice';
+
 
 export const store = configureStore({
   reducer: {
     wallet: walletReducer,
     token: tokenReducer,
     orderBook: orderBookReducer,
+    transaction: transactionReducer,
   },
 });
 

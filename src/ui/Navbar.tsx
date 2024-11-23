@@ -30,6 +30,9 @@ const Navbar: React.FC = () => {
             <NavLink to="/orderBook" className="text-gray-700 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
               Order Book
             </NavLink>
+            <NavLink to="/swapToken" className="text-gray-700 hover:text-blue-500 px-3 py-2 rounded-md text-sm font-medium">
+              Token Swap
+            </NavLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -72,6 +75,9 @@ const Navbar: React.FC = () => {
             </NavLink>
             <NavLink to="/orderBook" className="text-gray-700 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium">
               Order Book
+            </NavLink>
+            <NavLink to="/swapToken" className="text-gray-700 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium">
+              Token Swap
             </NavLink>
         </div>
       </div>

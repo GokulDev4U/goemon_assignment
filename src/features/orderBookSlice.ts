@@ -56,10 +56,10 @@ export const fetchOrderBook = createAsyncThunk<OrderBookPayload, void, AsyncThun
                 price: order.price.toString(),
                 volume: order.volume.toString(),
               })),
-              slippage: '',        
-              priceImpact: '',     
-              fees: '',            
-              percentageChange: '', 
+              slippage: data.slippage,
+              priceImpact: data.priceImpact,
+              fees: data.fees,
+              percentageChange: data.percentageChange,
             });
           } else {
             reject(new Error('Invalid order book data received from WebSocket'));
