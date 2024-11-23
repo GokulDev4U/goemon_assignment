@@ -31,7 +31,7 @@ export const connectWallet = createAsyncThunk<WalletDetails, void, { rejectValue
       // Connect to MetaMask
       const provider = new BrowserProvider(ethereum);
       const accounts = await provider.send('eth_requestAccounts', []); // Request MetaMask access
-      const signer = provider.getSigner();
+      // const signer = provider.getSigner();
       const address = accounts[0];
       const balanceInWei = await provider.getBalance(address);
       const balance = formatEther(balanceInWei); // Convert to ether
