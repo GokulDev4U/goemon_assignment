@@ -14,21 +14,19 @@ const calculateMetrics = (bidOrders: any[], askOrders: any[]) => {
   const lowestAsk = parseFloat(askOrders[0].price);
 
   // Mock calculations
-  const slippage = ((lowestAsk - highestBid) / highestBid * 100).toFixed(2); // % difference
+  const slippage = (((lowestAsk - highestBid) / highestBid) * 100).toFixed(2); // % difference
   const priceImpact = (Math.random() * 0.5).toFixed(2); // Example value
-  const fees = ((lowestAsk * 0.001)).toFixed(2); // Assuming 0.1% fee
-  const percentageChange = ((lowestAsk - highestBid) / highestBid * 100).toFixed(2);
+  const fees = (lowestAsk * 0.001).toFixed(2); // Assuming 0.1% fee
+  const percentageChange = (((lowestAsk - highestBid) / highestBid) * 100).toFixed(2);
 
   return { slippage, priceImpact, fees, percentageChange };
 };
-
 
 class WebSocketService {
   private socket: WebSocket;
 
   constructor() {
-    // WebSocket URL for Binance Depth Stream (order book updates)
-    this.socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@depth');  
+    this.socket = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@depth');
   }
 
   subscribeToOrderBook(callback: Function) {
@@ -37,12 +35,12 @@ class WebSocketService {
       // The structure contains bid and ask orders
       if (data && data.a && data.b) {
         const bidOrders = data.a.map((order: any) => ({
-          price: order[0],  // Bid price
+          price: order[0], // Bid price
           volume: order[1], // Bid volume
         }));
 
         const askOrders = data.b.map((order: any) => ({
-          price: order[0],  // Ask price
+          price: order[0], // Ask price
           volume: order[1], // Ask volume
         }));
 
@@ -51,7 +49,7 @@ class WebSocketService {
         callback({
           bidOrders,
           askOrders,
-          ...metrics, 
+          ...metrics,
         });
       }
     };
@@ -62,9 +60,10 @@ class WebSocketService {
   }
 
   unsubscribe() {
-    this.socket.close();  // Close the WebSocket connection
+    this.socket.close();
   }
 }
 
-export default new WebSocketService();
-
+// Assign the instance to a variable and export it
+const websocketServiceInstance = new WebSocketService();
+export default websocketServiceInstance;
