@@ -1,5 +1,5 @@
 // src/features/orderBookSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import BinanceWebSocket from '../services/BinanceWebSocket';
 // import WebSocketService from '../services/websocketService';
 

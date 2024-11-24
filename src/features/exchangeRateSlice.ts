@@ -1,5 +1,5 @@
 // src/features/exchangeRateSlice.ts
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import BinanceExchangeRateWebSocket from '../services/BinanceExchangeRateWebSocket';
 
 interface ExchangeRateState {
