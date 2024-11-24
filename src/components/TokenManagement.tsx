@@ -59,7 +59,7 @@ const TokenManagement = () => {
           value={selectedValue}
           onChange={(value) => handleDropdownChange(value)}
           placeholder="Choose a token..."
-          className="w-64 z-20 relative"
+          className="w-64 z-20 relative my-2"
         />
       )}
 

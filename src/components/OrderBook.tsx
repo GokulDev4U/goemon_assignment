@@ -7,50 +7,29 @@ import Loader from "../ui/Loader";
 
 const OrderBook = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { bidOrders, askOrders, slippage, priceImpact, fees, percentageChange, loading, error } = useSelector((state: RootState) => state.orderBook);
+  const { bidOrders, askOrders, slippage, priceImpact, fees, percentageChange, warning, previousBidPrice,previousAskPrice, loading, error } = useSelector((state: RootState) => state.orderBook);
 
   useEffect(() => {
     dispatch(fetchOrderBook()); // Fetch initial data
-    // const interval = setInterval(() => {
-    //   dispatch(fetchOrderBook()); // Polling every 2 seconds
-    // }, 2000);
+    const interval = setInterval(() => {
+      dispatch(fetchOrderBook()); // Polling every 2 seconds
+    }, 2000);
 
-    // return () => clearInterval(interval); // Clean up the interval on unmount
+    return () => clearInterval(interval); // Clean up the interval on unmount
   }, [dispatch]);
 
-  const renderPriceTrend = (price: string) => {
-    const trend = parseFloat(price) > 0 ? "↑" : "↓";
-    return <span className={trend ? "text-green-500" : "text-red-500"}>{trend}</span>;
+  const renderPriceTrend = (currentPrice: number, previousPrice: number | null) => {
+    if (previousPrice === null) return null;
+    return currentPrice > previousPrice ? (
+      <span className="text-green-500">↑</span>
+    ) : (
+      <span className="text-red-500">↓</span>
+    );
   };
-
-  // type BidOrdersType = { price: string; volume: string };
-  // type AskOrdersType = { price: string; volume: string };
-
-  // const columns = [
-  //   { header: "Price", accessor: "price" },
-  //   { header: "Volume", accessor: "volume" },
-  //   {
-  //     Header: "Trend",
-  //     accessor: "trend",
-  //     Cell: ({ row }) => renderPriceTrend(row.original.price, true),
-  //   },
-  // ];
-
-  // const bidOrdersData: BidOrdersType[] = bidOrders.slice(0, 5).map(order => ({
-  //   ...order,
-  //   trend: renderPriceTrend(order.price, true),
-  // }));
-
-  // const askOrdersData: AskOrdersType[] = askOrders.slice(0, 5).map(order => ({
-  //   ...order,
-  //   trend: renderPriceTrend(order.price, false),
-  // }));
 
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold">Order Book</h2>
-
-      {/* <Table<BidOrdersType> data={bidOrdersData.slice(0, 5)} columns={columns} className="shadow-md" /> */}
 
       {loading ? (
         <Loader />
@@ -75,7 +54,7 @@ const OrderBook = () => {
                     >
                       <td className="px-4 py-2 text-gray-700">{order.price}</td>
                       <td className="px-4 py-2 text-gray-700">{order.volume}</td>
-                      <td className="px-4 py-2">{renderPriceTrend(order.price)}</td>
+                      <td className="px-4 py-2">{renderPriceTrend(parseFloat(order.price), previousBidPrice)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -100,7 +79,7 @@ const OrderBook = () => {
                     >
                       <td className="px-4 py-2 text-gray-700">{order.price}</td>
                       <td className="px-4 py-2 text-gray-700">{order.volume}</td>
-                      <td className="px-4 py-2">{renderPriceTrend(order.price)}</td>
+                      <td className="px-4 py-2">{renderPriceTrend(parseFloat(order.price), previousAskPrice)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -118,6 +97,7 @@ const OrderBook = () => {
           <p>Price Impact: {priceImpact}</p>
           <p>Fees: {fees}</p>
           <p>Percentage Change: {percentageChange}</p>
+          <p>Warning: {warning}</p>
         </div>
       </div>
 
