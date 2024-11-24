@@ -1,5 +1,5 @@
 // src/features/orderBookSlice.ts
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import BinanceWebSocket from '../services/BinanceWebSocket';
 // import WebSocketService from '../services/websocketService';
 
@@ -13,8 +13,8 @@ interface OrderBookState {
   warning: string | null,
   previousBidPrice: number ,
   previousAskPrice: number ,
-  loading: boolean;
-  error: string | null;
+  loading?: boolean;
+  error?: string | null;
 }
 
 interface OrderBookPayload {
@@ -134,14 +134,17 @@ const orderBookSlice = createSlice({
   name: 'orderBook',
   initialState,
   reducers: {
-    // setOrderBookData: (state, action) => {
-    //   const { bidOrders, askOrders, slippage, priceImpact, fees, percentageChange } = action.payload;
+    // setOrderBookData: (state, action: PayloadAction<OrderBookState>) => {
+    //   const { bidOrders, askOrders, slippage, priceImpact, fees, percentageChange,warning,highestBid,lowestAsk } = action.payload;
     //   state.bidOrders = bidOrders;
     //   state.askOrders = askOrders;
     //   state.slippage = slippage;
     //   state.priceImpact = priceImpact;
     //   state.fees = fees;
     //   state.percentageChange = percentageChange;
+    //   state.warning= warning;
+    //   state.previousBidPrice= highestBid ;
+    //   state.previousAskPrice= lowestAsk ;
     // },
   },
   extraReducers: (builder) => {
@@ -171,4 +174,6 @@ const orderBookSlice = createSlice({
 
 // export const { setOrderBookData } = orderBookSlice.actions;
 export default orderBookSlice.reducer;
+
+
 

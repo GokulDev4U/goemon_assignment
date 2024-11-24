@@ -55,6 +55,15 @@ const Navbar: React.FC = () => {
               Order Book
             </NavLink>
             <NavLink
+              to="/exchangeRate"
+              className={({ isActive }) => {
+                console.log(`Is active: ${isActive}`);
+                return `text-gray-700 px-3 py-2 rounded-md text-sm font-medium ${isActive ? "text-blue-700 font-semibold" : "hover:text-blue-500"}`;
+              }}
+            >
+              Exchange Rate
+            </NavLink>
+            <NavLink
               to="/swapToken"
               className={({ isActive }) => {
                 console.log(`Is active: ${isActive}`);
@@ -116,11 +125,18 @@ const Navbar: React.FC = () => {
             Order Book
           </NavLink>
           <NavLink
+            to="/exchangeRate"
+            className="text-gray-700 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
+          >
+            Exchange Rate
+          </NavLink>
+          <NavLink
             to="/swapToken"
             className="text-gray-700 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium"
           >
             Token Swap
           </NavLink>
+          {/*  */}
         </div>
       </div>
     </nav>

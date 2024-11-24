@@ -5,6 +5,8 @@ import tokenReducer from './tokenSlice';
 import orderBookReducer from './orderBookSlice';
 import transactionReducer from './transactionSlice';
 import darkModeReducer from './darkModeSlice';
+import exchangeRateReducer from './exchangeRateSlice';
+
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +15,7 @@ export const store = configureStore({
     orderBook: orderBookReducer,
     transaction: transactionReducer,
     darkMode: darkModeReducer,
+    exchangeRate: exchangeRateReducer,
   },
 });
 
